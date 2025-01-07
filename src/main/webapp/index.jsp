@@ -1,6 +1,14 @@
+<%@page import="learnbyteaching.emaillist.vo.EmailVo"%>
+<%@page import="java.util.List"%>
+<%@ page import="learnbyteaching.emaillist.dao.EmailListDaoImpl"%>
+<%@ page import="learnbyteaching.emaillist.dao.EmailListDao"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%
+ServletContext context = getServletContext();
+String dbUser = context.getInitParameter("dbUser");
+String dbPass = context.getInitParameter("dbPass");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +23,12 @@
 <body>
     <div class="container">
         <h1 class="mt-5">메일링 리스트</h1>
+<%
+EmailListDao dao = new EmailListDaoImpl(dbUser, dbPass);
+List<EmailVo> list = dao.getList();
 
+response.getWriter().println(list);
+%>
         <!-- 리스트 -->
         <!-- vo 객체의 getter를 이용, 리스트를 표시 -->
         <table class="table table-bordered mt-3">
