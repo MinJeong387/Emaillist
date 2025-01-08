@@ -11,14 +11,13 @@ import java.util.List;
 
 import learnbyteaching.emaillist.vo.EmailVo;
 
-public class EmailListDaoImpl 
-	extends BaseDao
-	implements EmailListDao {
+public class EmailListDaoImpl extends BaseDao implements EmailListDao {
 
-	//	Constructor
+	// Constructor
 	public EmailListDaoImpl(String dbUser, String dbPass) {
 		super(dbUser, dbPass);
 	}
+
 	@Override
 	public List<EmailVo> getList() {
 		List<EmailVo> list = new ArrayList<>();
@@ -27,51 +26,49 @@ public class EmailListDaoImpl
 		ResultSet rs = null;
 		try {
 			conn = getConnection();
-			String sql = "SELECT no, last_name, first_name, email, created_at " +
-					"FROM emaillist ORDER BY created_at DESC";
+			String sql = "SELECT no, last_name, first_name, email, created_at "
+					+ "FROM emaillist ORDER BY created_at DESC";
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery(sql);
-			
+
 			while (rs.next()) {
 				Long no = rs.getLong(1);
 				String lastName = rs.getString(2);
 				String firstName = rs.getString(3);
 				String email = rs.getString(4);
 				Date createdAt = rs.getDate(5);
-				
-				EmailVo info = new EmailVo(no, 
-						lastName,
-						firstName,
-						email,
-						createdAt);
+
+				EmailVo info = new EmailVo(no, lastName, firstName, email, createdAt);
 				list.add(info);
 			}
 		} catch (Exception e) {
 			System.err.println("ERROR:" + e.getMessage());
 		} finally {
 			try {
-				if (rs != null) rs.close();
-				if (stmt != null) stmt.close();
-				if (conn != null) conn.close();
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+				if (conn != null)
+					conn.close();
 			} catch (SQLException e) {
 				System.err.println("ERROR:" + e.getMessage());
 			}
 		}
 		return list;
 	}
+
 	@Override
 	public boolean insert(EmailVo vo) {
 		int insertedCount = 0;
-		
+
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = getConnection();
-			
-			String sql = "INSERT INTO emaillist " +
-					"(last_name, first_name, email) " +
-					"VALUES (?, ?, ?)";
+
+			String sql = "INSERT INTO emaillist " + "(last_name, first_name, email) " + "VALUES (?, ?, ?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getLastName());
 			pstmt.setString(2, vo.getFirstName());
@@ -81,21 +78,24 @@ public class EmailListDaoImpl
 			System.err.println("ERROR:" + e.getMessage());
 		} finally {
 			try {
-				if (pstmt != null) pstmt.close();
-				if (conn != null) conn.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
 			} catch (Exception e) {
 				System.err.println("ERROR:" + e.getMessage());
 			}
 		}
-		
+
 		return 1 == insertedCount;
 	}
+
 	@Override
 	public boolean delete(Long no) {
 		int deletedCount = 0;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		
+
 		try {
 			conn = getConnection();
 			String sql = "DELETE FROM emaillist WHERE no=?";
@@ -106,8 +106,10 @@ public class EmailListDaoImpl
 			e.printStackTrace();
 		} finally {
 			try {
-				if (pstmt != null) pstmt.close();
-				if (conn != null) conn.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (conn != null)
+					conn.close();
 			} catch (Exception e) {
 				System.err.println("ERROR:" + e.getMessage());
 			}
